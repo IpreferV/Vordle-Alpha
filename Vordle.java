@@ -2,11 +2,11 @@ import java.util.*;
 import java.io.*;
 public class Vordle {
     final static String line = new String(new char[25]).replace('\0', '-');
-    static String verifiedUserInput = "";
+    //static String verifiedUserInput = "";
     static Scanner userInput = new Scanner(System.in);
+    static String wordToGuess = "";
     public static ArrayList<String> dictionary = new ArrayList<>();
     public static ArrayList<String> dictionaryExtra = new ArrayList<>();
-    public static String wordToGuess = "";
     public static final String ANSI_RESET = "\u001B[0m"; // Color Reset
     public static final String ANSI_YELLOW = "\u001B[33m"; // Color Yellow
     public static final String ANSI_GREEN = "\u001B[32m"; // Color Green
@@ -21,12 +21,13 @@ public class Vordle {
 
         System.out.println(line);
         
+        // user menu choice
         if (userMenuInput == 1)
-                game(null);
+             wordCall(null);
         if (userMenuInput == 2)
             System.exit(0);
         if (userMenuInput == 3) {
-            System.out.println("\nVordle: Java Wordle by Vault Air!\n\nHow it works: Enter a 5-letter word. \nFor 6 attempts, you should guess the random word. \nHints are given through input and will change color if:\n\n"+"SLEE"+ANSI_GREEN+"P"+ANSI_RESET+": P is in the right spot.\n"+ANSI_YELLOW+"Z"+ANSI_RESET+"OOMS: Z is in the word to be guessed, but is in the wrong spot.\n"+"JAVAS: Neither letters are in the random word.");
+            System.out.println("\nVordle: Java Wordle by IpreferV!\n\nHow it works: Enter a 5-letter word. \nFor 6 attempts, you should guess the random word. \nHints are given through input and will change color if:\n\n"+"SLEE"+ANSI_GREEN+"P"+ANSI_RESET+": P is in the right spot.\n"+ANSI_YELLOW+"Z"+ANSI_RESET+"OOMS: Z is in the word to be guessed, but is in the wrong spot.\n"+"JAVAS: Neither letters are in the random word.");
             main(args);
         }
     }
@@ -47,39 +48,60 @@ public class Vordle {
         wordToGuess = dictionary.get((int)(Math.random()*dictionary.size()));
 
         Scanner dictionaryExtraScanner = new Scanner(new FileReader("vordleWordExtra.txt")).useDelimiter(",");
-        ArrayList<String> dictionaryExtra = new ArrayList<>();
 
+        // proceed to the game method after reading the extra dictionary
         while(dictionaryExtraScanner.hasNext()) {
             dictionary.add(dictionaryExtraScanner.next());
-            game(null);
         }
+
+        game(null);
     }
     
     public static void game(String[] args) throws IOException {
-        /*
-         * Concept: Wordle in Java
-         * 1. Start by calling the dictionary file
-         * 2. Get a random word from the dictionary file
-         * 3. Split the word characters to array indices
-         * 5. Ask the user to input a word
-         * 6. Split the user input into array indices
-         * 7. Verify if:
-         * 7.1. The word is an english word
-         * 7.2. The user input word matches the randomly called word
-         * 8. End if the user matched the randomly called word.
-         */
 
-        // ask the user to input a word
+        System.out.println(wordToGuess);
         System.out.println("Guess the word of the randomness.");
         String userGuess = userInput.next();
+        
+        // attempts
 
-        for (int v = 0; v < 5; v++) {
-            if (userGuess.length() == 5 && (dictionary.contains(userGuess) || dictionaryExtra.contains(userGuess))) {
-                verifiedUserInput = userGuess;
+        for (int v = 0; v < 6; v++) {
+            if (wordToGuess.equals(userGuess))
+                endGame(null);
+            else if (userGuess.length() == 5 && (dictionary.contains(userGuess) || dictionaryExtra.contains(userGuess))) {
+                String verifiedUserInput = userGuess;
+                for (int j = 0; j < 5;j++) {
+                    System.out.print(ANSI_GREEN+verifiedUserInput.charAt(j)+ANSI_RESET);
+                    continue;
+                }
             }
             else {
                 System.out.println("Please enter a valid 5-letter English word.");
-                }
+                return;
+            }
         }
+
+
+        /*for (int j = 0; j < 5; ) {
+            if (userGuess == wordToGuess) {
+                endGame(null);
+                break;
+            }
+            else if (userGuess.length() == 5 && (dictionary.contains(userGuess) || dictionaryExtra.contains(userGuess))) {
+                verifiedUserInput = userGuess;
+                System.out.print(ANSI_GREEN+verifiedUserInput.charAt(j)+ANSI_RESET);
+                //game(null);
+                j++;
+            }
+            else if (userGuess.length() != 5 || (dictionary.contains(userGuess) || dictionaryExtra.contains(userGuess))) {
+                System.out.println("Please enter a valid 5-letter English word.");
+                return;
+            }
+        }*/
+    }
+
+    public static void endGame(String[] args) throws IOException {
+        System.out.println(line);
+        System.out.println("The word was "+ANSI_GREEN+wordToGuess+ANSI_RESET+"!");
     }
 }

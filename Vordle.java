@@ -10,7 +10,7 @@ public class Vordle {
     public static final String ANSI_RESET = "\u001B[0m"; // Color Reset
     public static final String ANSI_YELLOW = "\u001B[33m"; // Color Yellow
     public static final String ANSI_GREEN = "\u001B[32m"; // Color Green
-    public static String startMenu = "Press"+ANSI_GREEN+" 1 to Start the Game"+ANSI_RESET+" | "+ANSI_YELLOW+"2 to Exit the Game"+ANSI_RESET+" | 3 for Mechanics & Info. -> ";
+    public static String startMenu = "Press"+ANSI_GREEN+" 1 to Start the Game"+ANSI_RESET+" | "+ANSI_YELLOW+"2 to Exit the Game"+ANSI_RESET+" | 3 for Mechanics & Info. \n-> ";
     
     public static void main(String[] args) throws IOException {
         System.out.println(line);
@@ -25,7 +25,8 @@ public class Vordle {
         if (userMenuInput == 2)
             System.exit(0);
         if (userMenuInput == 3) {
-            System.out.println("\nVordle: Java Wordle(?) by IpreferV.");
+            System.out.println(line);
+            System.out.println("Vordle: Java Wordle(?) by IpreferV.");
             System.out.println("How it works: Enter a 5-letter word. \nFor 6 attempts, you should guess the random word.\n\nHints are given through input and will change color:");
             System.out.println("SLEE"+ANSI_GREEN+"P"+ANSI_RESET+": P is in the right spot.\n"+ANSI_YELLOW+"Z"+ANSI_RESET+"OOMS: Z is in the word to be guessed, but is in the wrong spot.\n"+"JAVAS: Neither letters are in the random word.");
             main(args);
@@ -68,8 +69,8 @@ public class Vordle {
 
         int attempts = 6;
         
+        Instant timeStart = Instant.now(); // timer
         while (attempts > 0) {
-            Instant timeStart = Instant.now(); // timer
             if (attempts > 0) {
                 String userGuess = userInput.next();
                 System.out.print("-> "); // vanity purposes 
@@ -119,7 +120,7 @@ public class Vordle {
 
         System.out.println("Press "+ANSI_GREEN+"1"+ANSI_RESET+" to "+ANSI_YELLOW+"try the same word"+ANSI_RESET+".");
         System.out.println("Press "+ANSI_GREEN+"2"+ANSI_RESET+" to "+ANSI_GREEN+"guess a new word"+ANSI_RESET+".");
-        System.out.println("Press "+ANSI_YELLOW+"3"+ANSI_RESET+" to "+ANSI_YELLOW+"end the game"+ANSI_RESET+".");
+        System.out.println("Press "+ANSI_YELLOW+"3"+ANSI_RESET+" to "+ANSI_YELLOW+"main menu"+ANSI_RESET+".");
         
         System.out.print("-> ");
 
@@ -130,6 +131,6 @@ public class Vordle {
         if (userMenuInput == 2)
             wordCall(null);
         if (userMenuInput == 3)
-            System.exit(0);
+            main(args);;
     }
 }

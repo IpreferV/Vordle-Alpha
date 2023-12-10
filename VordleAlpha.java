@@ -28,7 +28,7 @@ public class VordleAlpha {
         if (userMenuInput == 3) {
             System.out.println(line);
             System.out.println("Vordle: Java Wordle(?) by IpreferV.");
-            System.out.println("How it works: Enter a 5-letter word. \nFor 6 attempts, you should guess the random word.\n\nHints are given through input and will change color:");
+            System.out.println("How it works: Enter a 5-letter word. \nWithin 6 attempts, you should guess the random word.\n\nHints are given through input and will change color:");
             System.out.println("SLEE"+ANSI_GREEN+"P"+ANSI_RESET+": P is in the right spot.\n"+ANSI_YELLOW+"Z"+ANSI_RESET+"OOMS: Z is in the word to be guessed, but is in the wrong spot.\n"+"JAVAS: Neither letters are in the random word.");
             System.out.println(ANSI_GREEN+"\nPlay the original wordle by Josh Wardle at "+ANSI_YELLOW+"https://www.nytimes.com/games/wordle/index.html"+ANSI_RESET);
             main(args);

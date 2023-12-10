@@ -1,12 +1,12 @@
 import java.util.*;
 import java.io.*;
+import java.time.*;
 public class Vordle {
     final static String line = new String(new char[25]).replace('\0', '-');
-    //static String verifiedUserInput = "";
     static Scanner userInput = new Scanner(System.in);
     static String wordToGuess = "";
-    public static ArrayList<String> dictionary = new ArrayList<>();
-    public static ArrayList<String> dictionaryExtra = new ArrayList<>();
+    public static ArrayList<String> dictionary = new ArrayList<>(); // declare dictionary as an array list of all of its contents
+    public static ArrayList<String> dictionaryExtra = new ArrayList<>(); // similar above
     public static final String ANSI_RESET = "\u001B[0m"; // Color Reset
     public static final String ANSI_YELLOW = "\u001B[33m"; // Color Yellow
     public static final String ANSI_GREEN = "\u001B[32m"; // Color Green
@@ -39,17 +39,18 @@ public class Vordle {
         // assuming the dictionary is constantly updating; get the directory count
         // add all contents into array list, separated by commas
         while(dictionaryScanner.hasNext()) {
-            dictionary.add(dictionaryScanner.next());
+            dictionary.add(dictionaryScanner.next().toUpperCase());
         }
 
-        // randomly call a word from the dictionary with comma as a separator from above
+        // assign a random word from dictionary array to be the final string word for user to guess
         wordToGuess = dictionary.get((int)(Math.random()*dictionary.size()));
 
+        // access/call the extra dictionary file
         Scanner dictionaryExtraScanner = new Scanner(new FileReader("vordleWordExtra.txt")).useDelimiter(",");
 
-        // proceed to the game method after reading the extra dictionary
+        // read the extra dictionary contents
         while(dictionaryExtraScanner.hasNext()) {
-            dictionary.add(dictionaryExtraScanner.next());
+            dictionary.add(dictionaryExtraScanner.next().toUpperCase());
         }
 
         game(null);
@@ -59,40 +60,55 @@ public class Vordle {
 
         System.out.println(line);
 
-        System.out.println(wordToGuess);
+        System.out.println(wordToGuess); // comment can be removed to show the randomly called word
         System.out.println("Guess the word of the randomness.");
 
         int attempts = 6;
         
         while (attempts > 0) {
+            Instant timeStart = Instant.now(); // timer
             if (attempts > 0) {
                 String userGuess = userInput.next();
-                System.out.print("-> ");
-                if (userGuess.length() != 5 && (dictionary.contains(userGuess) || dictionaryExtra.contains(userGuess)))
-                    System.out.println("Please enter a 5-letter English word.");
-                else {
-                    String verifiedUserGuess = userGuess;
+                System.out.print("-> "); // vanity purposes 
+
+                // verify user input if not english or 5 char long
+                if (userGuess.toUpperCase().length() != wordToGuess.toUpperCase().length() || !(dictionary.contains(userGuess.toUpperCase()) || dictionaryExtra.contains(userGuess.toUpperCase())))
+                    System.out.print("Please enter a 5-letter English word.");
+                else { // game proper
+                    String verifiedUserGuess = userGuess; // i think i dont have to do this actually
                     for (int v = 0; v < 5; v++) {
-                        char wtgIndex = wordToGuess.charAt(v);
-                        char vuiIndex = verifiedUserGuess.charAt(v);
+                        char wtgIndex = wordToGuess.charAt(v); // individual word to guess letters from word to guess word
+                        char vuiIndex = verifiedUserGuess.charAt(v); // individual user input letters from user input word
+
+                        // user guess matches word
                         if (wordToGuess.equalsIgnoreCase(userGuess)) {
+                            Instant timeStop = Instant.now();
+                            Duration elapsedTime = Duration.between(timeStart, timeStop);
                             System.out.println("The word was "+ANSI_GREEN+wordToGuess.toUpperCase()+ANSI_RESET+"!");
                             System.out.println(ANSI_GREEN+"Congratulations."+ANSI_RESET);
-                            endMenu(null);
+                            System.out.println(ANSI_YELLOW+"\nElapsed time: "+elapsedTime.toSeconds()+" seconds."+ANSI_RESET);
+                            endMenu(null); // go to end menu
                         }
-                        if (vuiIndex == wtgIndex)
+                        if (vuiIndex == wtgIndex) // if letter position of user input matches with the word to guess letter positions
                             System.out.print(ANSI_GREEN+verifiedUserGuess.toUpperCase().charAt(v)+ANSI_RESET);
-                        else if (wordToGuess.contains(String.valueOf(vuiIndex)))
+                        else if (wordToGuess.contains(String.valueOf(vuiIndex))) // if letter position of user is in the word to guess but in wrong position
                             System.out.print(ANSI_YELLOW+verifiedUserGuess.toUpperCase().charAt(v)+ANSI_RESET);
-                        else
+                        else // if user input is not in the word to guess
                             System.out.print(verifiedUserGuess.toUpperCase().charAt(v));
                     }
-                    --attempts;
+                    --attempts; // only decrement attempts if the user input is a valid english 5-letter word
                 }
                 System.out.println("\nAttempts left: "+attempts);
             }
-            else
-                endMenu(null);
+
+            // no more attempts
+            else {
+                Instant timeStop = Instant.now();
+                Duration elapsedTime = Duration.between(timeStart, timeStop);
+                System.out.println(ANSI_YELLOW+"\nElapsed time: "+elapsedTime.toSeconds()+" seconds."+ANSI_RESET);
+
+                endMenu(null); // go to end menu
+            }
         }
     }
 

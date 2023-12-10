@@ -169,6 +169,5 @@ public class VordleAlpha {
             main(args);;
         if (userMenuInput == 4)
             userStatsMenu(null);
-
     }
 }

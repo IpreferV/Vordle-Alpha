@@ -81,8 +81,8 @@ public class Vordle {
                 else { // game proper
                     String verifiedUserGuess = userGuess; // i think i dont have to do this actually
                     for (int v = 0; v < 5; v++) {
-                        char wtgIndex = wordToGuess.toUpperCase().charAt(v); // individual word to guess letters from word to guess word
-                        char vuiIndex = verifiedUserGuess.toUpperCase().charAt(v); // individual user input letters from user input word
+                        char wtgPosition = wordToGuess.toUpperCase().charAt(v); // individual word to guess letters from word to guess word
+                        char vuiPosition = verifiedUserGuess.toUpperCase().charAt(v); // individual user input letters from user input word
 
                         // user guess matches word
                         if (wordToGuess.equalsIgnoreCase(userGuess)) {
@@ -93,9 +93,9 @@ public class Vordle {
                             System.out.println(ANSI_YELLOW+"\nElapsed time: "+elapsedTime.toSeconds()+" seconds."+ANSI_RESET);
                             endMenu(null); // go to end menu
                         }
-                        if (vuiIndex == wtgIndex) // if letter position of user input matches with the word to guess letter positions
+                        if (vuiPosition == wtgPosition) // if letter position of user input matches with the word to guess letter positions
                             System.out.print(ANSI_GREEN+verifiedUserGuess.toUpperCase().charAt(v)+ANSI_RESET);
-                        else if (wordToGuess.contains(String.valueOf(vuiIndex))) // if letter position of user is in the word to guess but in wrong position
+                        else if (wordToGuess.contains(String.valueOf(vuiPosition))) // if letter position of user is in the word to guess but in wrong position
                             System.out.print(ANSI_YELLOW+verifiedUserGuess.toUpperCase().charAt(v)+ANSI_RESET);
                         else // if user input is not in the word to guess
                             System.out.print(verifiedUserGuess.toUpperCase().charAt(v));

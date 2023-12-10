@@ -25,7 +25,9 @@ public class Vordle {
         if (userMenuInput == 2)
             System.exit(0);
         if (userMenuInput == 3) {
-            System.out.println("\nVordle: Java Wordle by IpreferV!\n\nHow it works: Enter a 5-letter word. \nFor 6 attempts, you should guess the random word. \nHints are given through input and will change color:\n"+"SLEE"+ANSI_GREEN+"P"+ANSI_RESET+": P is in the right spot.\n"+ANSI_YELLOW+"Z"+ANSI_RESET+"OOMS: Z is in the word to be guessed, but is in the wrong spot.\n"+"JAVAS: Neither letters are in the random word.");
+            System.out.println("\nVordle: Java Wordle(?) by IpreferV.");
+            System.out.println("How it works: Enter a 5-letter word. \nFor 6 attempts, you should guess the random word.\n\nHints are given through input and will change color:");
+            System.out.println("SLEE"+ANSI_GREEN+"P"+ANSI_RESET+": P is in the right spot.\n"+ANSI_YELLOW+"Z"+ANSI_RESET+"OOMS: Z is in the word to be guessed, but is in the wrong spot.\n"+"JAVAS: Neither letters are in the random word.");
             main(args);
         }
     }
@@ -61,6 +63,7 @@ public class Vordle {
         System.out.println(line);
 
         System.out.println(wordToGuess); // comment can be removed to show the randomly called word
+        
         System.out.println("Guess the word of the randomness.");
 
         int attempts = 6;
@@ -77,8 +80,8 @@ public class Vordle {
                 else { // game proper
                     String verifiedUserGuess = userGuess; // i think i dont have to do this actually
                     for (int v = 0; v < 5; v++) {
-                        char wtgIndex = wordToGuess.charAt(v); // individual word to guess letters from word to guess word
-                        char vuiIndex = verifiedUserGuess.charAt(v); // individual user input letters from user input word
+                        char wtgIndex = wordToGuess.toUpperCase().charAt(v); // individual word to guess letters from word to guess word
+                        char vuiIndex = verifiedUserGuess.toUpperCase().charAt(v); // individual user input letters from user input word
 
                         // user guess matches word
                         if (wordToGuess.equalsIgnoreCase(userGuess)) {
@@ -100,9 +103,8 @@ public class Vordle {
                 }
                 System.out.println("\nAttempts left: "+attempts);
             }
-
             // no more attempts
-            else {
+            if (attempts == 0) {
                 Instant timeStop = Instant.now();
                 Duration elapsedTime = Duration.between(timeStart, timeStop);
                 System.out.println(ANSI_YELLOW+"\nElapsed time: "+elapsedTime.toSeconds()+" seconds."+ANSI_RESET);

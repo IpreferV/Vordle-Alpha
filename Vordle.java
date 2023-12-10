@@ -63,7 +63,7 @@ public class Vordle {
 
         System.out.println(line);
 
-        System.out.println(wordToGuess); // comment can be removed to show the randomly called word
+        //System.out.println(wordToGuess); // comment can be removed to show the randomly called word
         
         System.out.println("Guess the word of the randomness.");
 

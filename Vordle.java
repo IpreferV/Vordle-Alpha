@@ -61,52 +61,50 @@ public class Vordle {
 
         System.out.println(wordToGuess);
         System.out.println("Guess the word of the randomness.");
-        String userGuess = userInput.next();
-
-        System.out.print("-> ");
 
         int attempts = 6;
-
-        // att 6
-        if (attempts > 0){
-            for (int v = 0; v < 5; v++) {
-                if (wordToGuess.equals(userGuess)) {
-                    System.out.print(ANSI_GREEN+userGuess.charAt(v)+ANSI_RESET);
-                }
-                if (userGuess.length() == 5 && (dictionary.contains(userGuess) || dictionaryExtra.contains(userGuess))) {
-                    String verifiedUserInput = userGuess;
-                    char positionLetters = verifiedUserInput.charAt(v);
-                    if (verifiedUserInput.contains(String.valueOf(positionLetters))) {
-                        int wtgIndex = verifiedUserInput.indexOf(positionLetters);
-                        int vuiIndex = wordToGuess.indexOf(positionLetters);
-
-                         if (vuiIndex == wtgIndex) 
-                            System.out.print(ANSI_GREEN+verifiedUserInput.charAt(v)+ANSI_RESET);
+        
+        while (attempts > 0) {
+            if (attempts > 0) {
+                String userGuess = userInput.next();
+                System.out.print("-> ");
+                if (userGuess.length() != 5 && (dictionary.contains(userGuess) || dictionaryExtra.contains(userGuess)))
+                    System.out.println("Please enter a 5-letter English word.");
+                else {
+                    String verifiedUserGuess = userGuess;
+                    for (int v = 0; v < 5; v++) {
+                        char wtgIndex = wordToGuess.charAt(v);
+                        char vuiIndex = verifiedUserGuess.charAt(v);
+                        if (wordToGuess.equalsIgnoreCase(userGuess)) {
+                            System.out.println("The word was "+ANSI_GREEN+wordToGuess.toUpperCase()+ANSI_RESET+"!");
+                            System.out.println(ANSI_GREEN+"Congratulations."+ANSI_RESET);
+                            endMenu(null);
+                        }
+                        if (vuiIndex == wtgIndex)
+                            System.out.print(ANSI_GREEN+verifiedUserGuess.toUpperCase().charAt(v)+ANSI_RESET);
+                        else if (wordToGuess.contains(String.valueOf(vuiIndex)))
+                            System.out.print(ANSI_YELLOW+verifiedUserGuess.toUpperCase().charAt(v)+ANSI_RESET);
                         else
-                            System.out.print(ANSI_YELLOW+verifiedUserInput.charAt(v)+ANSI_RESET);
+                            System.out.print(verifiedUserGuess.toUpperCase().charAt(v));
                     }
-                else
-                    System.out.print(verifiedUserInput.charAt(v));
+                    --attempts;
                 }
+                System.out.println("\nAttempts left: "+attempts);
             }
-            --attempts;
-            System.out.println("\nAttempts left: "+attempts);
+            else
+                endMenu(null);
         }
-
-        if (attempts == 1)
-            endGame(null);
     }
 
-    public static void endGame(String[] args) throws IOException {
-        System.out.println('\n'+line);
+    public static void endMenu(String[] args) throws IOException {
+        System.out.println(line);
 
-        //if (wordToGuess.contains(verifiedUserInput))
-        //System.out.println("The word was "+ANSI_GREEN+wordToGuess+ANSI_RESET+"!\nCongratulations.");
-
-        System.out.println("\nPress "+ANSI_GREEN+"1"+ANSI_RESET+" to "+ANSI_YELLOW+"try the same word"+ANSI_RESET+".");
+        System.out.println("Press "+ANSI_GREEN+"1"+ANSI_RESET+" to "+ANSI_YELLOW+"try the same word"+ANSI_RESET+".");
         System.out.println("Press "+ANSI_GREEN+"2"+ANSI_RESET+" to "+ANSI_GREEN+"guess a new word"+ANSI_RESET+".");
         System.out.println("Press "+ANSI_YELLOW+"3"+ANSI_RESET+" to "+ANSI_YELLOW+"end the game"+ANSI_RESET+".");
         
+        System.out.print("-> ");
+
         int userMenuInput = userInput.nextInt();
 
         if (userMenuInput == 1)

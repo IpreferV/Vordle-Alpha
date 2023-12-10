@@ -11,6 +11,8 @@ public class VordleAlpha {
     public static final String ANSI_RESET = "\u001B[0m"; // Color Reset
     public static final String ANSI_YELLOW = "\u001B[33m"; // Color Yellow
     public static final String ANSI_GREEN = "\u001B[32m"; // Color Green
+    public static final String ANSI_BLACK = "\u001B[30m"; // Color Black
+    public static final String ANSI_BLACK_BG = "\u001B[40m"; // Color BlackBG
     public static String startMenu = "Press"+ANSI_GREEN+" 1 to Start the Game"+ANSI_RESET+" | "+ANSI_YELLOW+"2 to Exit the Game"+ANSI_RESET+" | 3 for Mechanics & Info"+" | 4 for User Stats."+"\n-> ";
     
     public static void main(String[] args) throws IOException {
@@ -130,19 +132,20 @@ public class VordleAlpha {
         Instant timeStop = Instant.now();
         Duration statsUserTime = Duration.between(timeStats, timeStop);
         System.out.println(ANSI_YELLOW+"Total game time: "+statsUserTime.toSeconds()+" seconds."+ANSI_RESET);
-
-        System.out.println(ANSI_GREEN+"\n1"+ANSI_RESET+" Go back to Main Menu?");
-        System.out.println(ANSI_YELLOW+"2 Reset stats?"+ANSI_RESET);
+        System.out.print(ANSI_GREEN+"\n1"+ANSI_RESET+" Go back to Main Menu? |"+ANSI_YELLOW+" 2 "+ANSI_RESET+"Reset stats? "+ANSI_RESET+" | 3 "+" Re-play the word. \n-> ");
         int userStatsIn = userInput.nextInt();
 
         if (userStatsIn == 1)
             main(args);
-        if (userStatsIn ==2 ) {
+        if (userStatsIn == 2) {
             score = 0;
             timeStats = Instant.now();
+            System.out.println("Stats cleared.");
         }
-
-        System.out.println("Stats cleared.");
+        if (userStatsIn == 3)
+            game(null);
+        if (userStatsIn == 100)
+            System.out.println(ANSI_BLACK+ANSI_BLACK_BG+wordToGuess+ANSI_RESET);
         userStatsMenu(null);
     }
 

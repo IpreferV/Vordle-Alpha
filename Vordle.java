@@ -5,12 +5,13 @@ public class Vordle {
     final static String line = new String(new char[25]).replace('\0', '-');
     static Scanner userInput = new Scanner(System.in);
     static String wordToGuess = "";
+    public static Instant timeStats = Instant.now(); // timer
     public static ArrayList<String> dictionary = new ArrayList<>(); // declare dictionary as an array list of all of its contents
     public static ArrayList<String> dictionaryExtra = new ArrayList<>(); // similar above
     public static final String ANSI_RESET = "\u001B[0m"; // Color Reset
     public static final String ANSI_YELLOW = "\u001B[33m"; // Color Yellow
     public static final String ANSI_GREEN = "\u001B[32m"; // Color Green
-    public static String startMenu = "Press"+ANSI_GREEN+" 1 to Start the Game"+ANSI_RESET+" | "+ANSI_YELLOW+"2 to Exit the Game"+ANSI_RESET+" | 3 for Mechanics & Info. \n-> ";
+    public static String startMenu = "Press"+ANSI_GREEN+" 1 to Start the Game"+ANSI_RESET+" | "+ANSI_YELLOW+"2 to Exit the Game"+ANSI_RESET+" | 3 for Mechanics & Info"+" | 4 for User Stats."+"\n-> ";
     
     public static void main(String[] args) throws IOException {
         System.out.println(line);
@@ -31,6 +32,8 @@ public class Vordle {
             System.out.println("SLEE"+ANSI_GREEN+"P"+ANSI_RESET+": P is in the right spot.\n"+ANSI_YELLOW+"Z"+ANSI_RESET+"OOMS: Z is in the word to be guessed, but is in the wrong spot.\n"+"JAVAS: Neither letters are in the random word.");
             main(args);
         }
+        if (userMenuInput == 4)
+            userStatsMenu(null);
     }
 
     public static void wordCall (String[] args) throws IOException {
@@ -58,18 +61,21 @@ public class Vordle {
 
         game(null);
     }
+
+    static int score = 0;
     
     public static void game(String[] args) throws IOException {
 
         System.out.println(line);
 
-        //System.out.println(wordToGuess); // comment can be removed to show the randomly called word
+        System.out.println(wordToGuess); // comment can be removed to show the randomly called word
         
         System.out.println("Guess the word of the randomness.");
 
         int attempts = 6;
         
-        Instant timeStart = Instant.now(); // timer
+        Instant timeStart = Instant.now();
+
         while (attempts > 0) {
             if (attempts > 0) {
                 String userGuess = userInput.next();
@@ -91,6 +97,7 @@ public class Vordle {
                             System.out.println("The word was "+ANSI_GREEN+wordToGuess.toUpperCase()+ANSI_RESET+"!");
                             System.out.println(ANSI_GREEN+"Congratulations."+ANSI_RESET);
                             System.out.println(ANSI_YELLOW+"\nElapsed time: "+elapsedTime.toSeconds()+" seconds."+ANSI_RESET);
+                            score++;
                             endMenu(null); // go to end menu
                         }
                         if (vuiPosition == wtgPosition) // if letter position of user input matches with the word to guess letter positions
@@ -106,6 +113,7 @@ public class Vordle {
             }
             // no more attempts
             if (attempts == 0) {
+                System.out.println("Out of attempts.");
                 Instant timeStop = Instant.now();
                 Duration elapsedTime = Duration.between(timeStart, timeStop);
                 System.out.println(ANSI_YELLOW+"\nElapsed time: "+elapsedTime.toSeconds()+" seconds."+ANSI_RESET);
@@ -115,13 +123,36 @@ public class Vordle {
         }
     }
 
+    public static void userStatsMenu(String[] args) throws IOException {
+        System.out.println(line);
+        System.out.println("Total correctly guessed words: "+score);
+        Instant timeStop = Instant.now();
+        Duration statsUserTime = Duration.between(timeStats, timeStop);
+        System.out.println(ANSI_YELLOW+"Total game time: "+statsUserTime.toSeconds()+" seconds."+ANSI_RESET);
+
+        System.out.println(ANSI_GREEN+"\n1"+ANSI_RESET+" Go back to Main Menu?");
+        System.out.println(ANSI_YELLOW+"2 Reset stats?"+ANSI_RESET);
+        int userStatsIn = userInput.nextInt();
+
+        if (userStatsIn == 1)
+            main(args);
+        if (userStatsIn ==2 ) {
+            score = 0;
+            timeStats = Instant.now();
+        }
+
+        System.out.println("Stats cleared.");
+        userStatsMenu(null);
+    }
+
     public static void endMenu(String[] args) throws IOException {
         System.out.println(line);
 
-        System.out.println("Press "+ANSI_GREEN+"1"+ANSI_RESET+" to "+ANSI_YELLOW+"try the same word"+ANSI_RESET+".");
+        System.out.println("\nPress "+ANSI_GREEN+"1"+ANSI_RESET+" to "+ANSI_YELLOW+"try the same word"+ANSI_RESET+".");
         System.out.println("Press "+ANSI_GREEN+"2"+ANSI_RESET+" to "+ANSI_GREEN+"guess a new word"+ANSI_RESET+".");
         System.out.println("Press "+ANSI_YELLOW+"3"+ANSI_RESET+" to "+ANSI_YELLOW+"main menu"+ANSI_RESET+".");
-        
+        System.out.println("Press "+ANSI_YELLOW+"4"+ANSI_RESET+" to "+ANSI_YELLOW+"display statistics"+ANSI_RESET+".");
+
         System.out.print("-> ");
 
         int userMenuInput = userInput.nextInt();
@@ -132,5 +163,8 @@ public class Vordle {
             wordCall(null);
         if (userMenuInput == 3)
             main(args);;
+        if (userMenuInput == 4)
+            userStatsMenu(null);
+
     }
 }

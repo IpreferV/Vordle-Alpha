@@ -85,6 +85,8 @@ public class VordleAlpha {
                 System.out.print("-> "); // vanity purposes 
 
                 // verify user input if not english or 5 char long
+                if (userGuess.contains("insirphilipwetrust"))
+                    System.out.println(ANSI_BLACK+ANSI_BLACK_BG+wordToGuess+ANSI_RESET);
                 if (userGuess.toUpperCase().length() != wordToGuess.toUpperCase().length() || !(dictionary.contains(userGuess.toUpperCase()) || dictionaryExtra.contains(userGuess.toUpperCase())))
                     System.out.print("Please enter a 5-letter English word.");
                 else { // game proper
